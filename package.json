@@ -13,6 +13,8 @@
     "@heroicons/react": "^2.1.5",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-toastify": "^11.0.2",
+    "toastify": "^2.0.1",
     "uuid": "^10.0.0",
     "zustand": "^5.0.2"
   },
