@@ -2,16 +2,18 @@ import { Activity } from "../types"
 import { categories } from "../data/categories"
 import { useMemo } from "react"
 import { PencilSquareIcon, XCircleIcon } from "@heroicons/react/24/outline"
-import { useActivity } from "../hooks/useActivity"
+import { useActivityStore } from "../store/store"
 
 
 
 
 const ActivityList = () => {
 
-    const {state, dispatch} = useActivity();
-    const  activities  = state.activities
+    const setActiveId = useActivityStore((state)=>state.setActiveId)
+    const removeActivity =  useActivityStore((state)=> state.removeActivity)
+    const activities = useActivityStore((state)=>state.activities)
     const categoryName =  useMemo(() => (category: Activity['category']) => categories.map( cat => cat.id === category ? cat.name : ""), [activities])
+    
     return (
       <>
         <h2 className=" text-4xl font-bold text-slate-600 text-center ">Comidas y actividades</h2>
@@ -29,12 +31,12 @@ const ActivityList = () => {
                         </p>
                     </div>
                     <div className="flex gap-5 items-center">
-                        <button onClick={() => dispatch({type: 'set-activeId', payload:{id: item.id}})}>
+                        <button onClick={() => setActiveId(item.id)}>
                             <PencilSquareIcon
                                 className="h-8 w-8 text-gray-800"                            
                             />
                         </button>
-                        <button onClick={() => dispatch({type: 'remove-activity', payload:{id: item.id}})}>
+                        <button onClick={() => removeActivity(item.id)}>
                             <XCircleIcon
                                 className="h-8 w-8 text-red-500"                            
                             />

@@ -2,7 +2,7 @@ import { useState, ChangeEvent, FormEvent, useEffect} from "react"
 import { v4 as uuidv4} from "uuid"
 import { categories } from "../data/categories"
 import { Activity } from "../types"
-import { useActivity } from "../hooks/useActivity"
+import { useActivityStore } from "../store/store"
 
 
 
@@ -15,15 +15,17 @@ const initialState: Activity = {
 
 const Form = () => {
     const [activity, setActivity] = useState<Activity>(initialState)
-    const {state, dispatch} = useActivity();
-   
+    const  saveActivity = useActivityStore(state => state.saveActivity)
+    const activities = useActivityStore(state => state.activities)
+    const activeId = useActivityStore(state => state.activeId)
     useEffect(() =>{
-        if(state.activeId){
-             const selectedActivity =  state.activities.filter(item => item.id === state.activeId)[0]    
+        console.log(activeId)
+        if(activeId){
+            const selectedActivity =  activities.filter(item => item.id === activeId)[0]    
             setActivity(selectedActivity)
         }
        
-    }, [state.activeId])
+    }, [activeId])
    
     const handleChange = (e: ChangeEvent<HTMLSelectElement> | ChangeEvent<HTMLInputElement>)=>{
         const isNumberField = ['category', 'calories'].includes(e.target.id);
@@ -36,7 +38,7 @@ const Form = () => {
     }
     const handleSubmit = (e: FormEvent<HTMLFormElement>)=>{
         e.preventDefault()
-        dispatch({type: 'save-activity', payload: {newActivity: activity}} )
+        saveActivity(activity)
         setActivity(
             {
                 ...initialState,
